@@ -27,7 +27,7 @@ export async function info(message, client) {
 │ Day : ${currentDay}
 │ Date : ${currentDate}/${currentMonth}/${currentYear} 
 │ Version : Developer
-│ Plugins : 23
+│ Plugins : 24
 ╰────────────────
 ╭────────────────
 │ 1 Menu  
@@ -51,8 +51,9 @@ export async function info(message, client) {
 │ 19 take
 │ 20 sticker
 │ 21 play
-│ 22 bugchat            
-│ 23 kill       
+│ 22 settag           
+│ 23 bugchat
+│ 24 kill
 ╰────────────────
     `
 ;
