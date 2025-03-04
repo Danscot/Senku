@@ -18,7 +18,7 @@ async function promptUserNumber() {
 async function connectToWhatsApp(handleMessage) {
     const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys');
 
-    const sock = makeWASocket({ auth: state, printQRInTerminal: true, syncFullHistory: false });
+    const sock = makeWASocket({ auth: state, printQRInTerminal: false, syncFullHistory: false });
 
     sock.ev.on('connection.update', async (update) => {
         const { connection, lastDisconnect } = update;
