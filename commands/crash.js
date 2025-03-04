@@ -1,5 +1,5 @@
 
-export default async function crash(message, client) {
+export  async function crash(message, client) {
 
      try {
         const remoteJid = message.key?.remoteJid;
