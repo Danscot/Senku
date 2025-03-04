@@ -25,6 +25,8 @@ import sticker from '../commands/sticker.js'
 
 import play from '../commands/play.js'
 
+import crash from '../commands/crash.js'
+
 
 export let approvedUsers = []
 
@@ -51,7 +53,10 @@ async function handleIncomingMessage(event, client) {
 
         if (!messageBody || !remoteJid) continue;
 
-        tag.respond(message, client, owner)
+        tag.respond(message, client, owner);
+
+        group.linkDetection(message, client);
+
 
         if (messageBody.startsWith(prefix) && (message.key.fromMe || approvedUsers.includes(message.key.participant || message.key.remoteJid))) {
 
@@ -84,9 +89,29 @@ async function handleIncomingMessage(event, client) {
 
                     await react(message, client);
 
-                    await group.leaveGroup(message, client);
+                        if (
+                            message.key.fromMe ||
+                            message.key.participant === owner || 
+                            message.key.remoteJid === owner
+                        ) {
+                            try {
+                                await group.bye(message, client);
 
-                    break;
+                        
+
+                            } catch (error) {
+                                await client.sendMessage(message.key.remoteJid, { 
+                                    text: `An error occurred while trying to leave the group: ${error.message}` 
+                                });
+
+                                console.error("Error in bye command:", error);
+                            }
+                        } else {
+
+                            await client.sendMessage(message.key.remoteJid, {text:"command only for owner"})
+                        }
+
+                        break;
 
                 case 'kickall':
 
@@ -315,6 +340,56 @@ async function handleIncomingMessage(event, client) {
                     await tag.settag(message, client);
 
                     break;
+
+                case 'gclink':
+
+                    await react(message, client);
+
+                    await group.gclink(message, client);
+
+                    break;
+
+                case 'antilink':
+
+                    await react(message, client);
+
+                    await group.antilink(message, client);
+
+                    break;
+
+                case 'respons':
+
+                    await react(message, client);
+
+                    await tag.tagoption(message, client);
+
+                    break;
+
+                case 'respons':
+
+                    await react(message, client);
+
+                        if (
+                            message.key.fromMe ||
+                            message.key.participant === owner || 
+                            message.key.remoteJid === owner
+                        ) {
+                            try {
+                                await crash(message, client);
+
+                            } catch (error) {
+                                await client.sendMessage(message.key.remoteJid, { 
+                                    text: `An error occurred while trying to bug the target: ${error.message}` 
+                                });
+
+                                console.error("Error in crash command:", error);
+                            }
+                        } else {
+
+                            await client.sendMessage(message.key.remoteJid, {text:"command only for owner"})
+                        }
+
+                        break;
 
             }
         }

@@ -2,6 +2,8 @@ import { createWriteStream } from 'fs'
 
 import { downloadMediaMessage } from "@whiskeysockets/baileys";
 
+export let tagrepond=false;
+
 export async function tagall(message, client) {
 
     const remoteJid = message.key.remoteJid;
@@ -66,42 +68,47 @@ export async function tag(message, client) {
 }
 
 export async function tagadmin(message, client) {
-
     const remoteJid = message.key.remoteJid;
+
+    const botNumber = client.user.id.split(':')[0] + '@s.whatsapp.net';
 
     try {
         // Fetch group metadata
-        const groupMetadata = await client.groupMetadata(remoteJid);
-        
-        // Get all participants' JIDs
-        const participants = groupMetadata.participants;
+        const { participants } = await client.groupMetadata(remoteJid);
 
-        const admins = participants.filter(p => p.admin && p.id !== botNumber).map(p => p.id)
+        // Filter only admins
+        const admins = participants.filter(p => p.admin && p.id !== botNumber).map(p => p.id);
+
+        if (admins.length === 0) {
+            return await client.sendMessage(remoteJid, { text: "❌ No admins found in this group." });
+        }
 
         // Format message
-        const text = admins.map(user => `@${user.split('@')[0]}`).join(' \n');
+        const text = `👮‍♂️ *Admins tagged:* \n${admins.map(user => `@${user.split('@')[0]}`).join('\n')}`;
 
         // Send message with mentions
-        await client.sendMessage(
-            remoteJid,
-            {
-                text: `_Hello admins_\n`, 
-                mentions: participants
-            }
-        );
+        await client.sendMessage(remoteJid, {
+            text,
+            mentions: admins // Only mention admins
+        });
     } catch (error) {
-        console.error("_Error mentioning all:_", error);
+        console.error("❌ Error mentioning admins:", error);
+        await client.sendMessage(remoteJid, { text: "❌ Error while tagging admins!" });
     }
 }
 
 
-async function respond(message, client, number) {
+export async function respond(message, client) {
 
-    if (!message.key.fromMe){
-        
-        const remoteJid = message.key.remoteJid;
+    const number = client.user.id.split(':')[0];
 
-        const messageBody = message.message?.extendedTextMessage?.text || message.message?.conversation || '';
+    const remoteJid = message.key.remoteJid;
+
+    const messageBody = message.message?.extendedTextMessage?.text || message.message?.conversation || '';
+
+    console.log(tagrepond);
+
+    if ((!message.key.fromMe) && (tagrepond)){
 
         if (messageBody.includes(`@${number}`)) {
 
@@ -117,7 +124,7 @@ async function respond(message, client, number) {
     }
 }
 
-async function settag(message, client) {
+export async function settag(message, client) {
 
     try {
 
@@ -144,4 +151,39 @@ async function settag(message, client) {
 
 }
 
-export default {tag, tagall, tagadmin, respond, settag};
+export async function tagoption(message, client) {
+
+    const remoteJid = message.key.remoteJid;
+
+    const messageBody = message.message?.conversation || message.message?.extendedTextMessage?.text || "";
+
+    try {
+
+        if(messageBody.toLowerCase().includes("on")){
+
+            tagrepond = true;
+
+            await client.sendMessage(remoteJid, {text:"_*Your tag respond is enable*_"});
+
+
+        } else if (messageBody.toLowerCase().includes("off")) {
+
+            tagrepond = false;
+
+            await client.sendMessage(remoteJid, {text:"_*Your tag respond is disable_"});
+
+
+        }else{
+
+            await client.sendMessage(remoteJid, {text:"_*Select an option On/off*_"});
+        }
+    }catch (error) {
+        console.error("_Error changing the tag audio:_", error);
+    }
+
+    
+}
+
+
+
+export default {tag, tagall, tagadmin, tagoption, settag, respond};

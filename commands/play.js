@@ -1,7 +1,13 @@
 import { exec } from 'child_process';
+
 import axios from 'axios';
+
 import readline from 'readline';
+
 import fs from 'fs';
+
+import pkg from 'yt-dlp-wrap';
+
 
 async function play(message, client) {
 
@@ -58,35 +64,31 @@ async function getArg(body) {
     return args.join('');  // Return the combined title from the parts
 }
 
-// Function to download audio based on the song title
+
 async function downloadAudio(title) {
+
+    const YTDlpWrap = pkg.default;
+    
     try {
-
-        // Sanitize the title to prevent issues with invalid characters in filenames
+        const ytDlp = new YTDlpWrap();  // Correct instantiation
         const songPath = `song.mp3`;
-
-        const url = await searchSongUrl(title); // Search for the song URL
+        const url = await searchSongUrl(title);
 
         console.log(`Found song URL: ${url}`);
         console.log(`Downloading audio from: ${url}`);
 
-        const command = `yt-dlp -x --audio-format mp3 --output song.mp3 ${url}`;
+        await ytDlp.execPromise([
+            url,
+            '-x',  // Extract audio
+            '--audio-format', 'mp3',
+            '--output', songPath
+        ]);
 
-        exec(command, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`❌ Error downloading audio: ${stderr}`);
-            } else {
-                console.log(`✅ Audio downloaded successfully: ${stdout}`);
-            }
-        });
-
-        await delay(9000);
-
+        console.log(`✅ Audio downloaded successfully`);
         return songPath;
-
     } catch (error) {
         console.error(`Error occurred while downloading audio: ${error.message}`);
-        return './music/default_song.mp3'; // Fallback to a default song
+        return './music/default_song.mp3';
     }
 }
 

@@ -14,6 +14,7 @@
     "@hapi/boom": "^10.0.1",
     "@whiskeysockets/baileys": "^6.7.9",
     "axios": "^1.8.1",
+    "baileys": "^6.7.13",
     "exiftool": "^0.0.3",
     "jimp": "^0.16.13",
     "link-preview-js": "^3.0.14",
@@ -23,7 +24,9 @@
     "sharp": "^0.32.6",
     "wa-sticker-formatter": "^4.4.4",
     "webp-converter": "^2.3.3",
+    "youtubei.js": "^13.1.0",
     "yt-api": "^0.2.7",
+    "yt-dlp-wrap": "^2.3.12",
     "ytdl-core": "^4.11.5"
   }
 }
