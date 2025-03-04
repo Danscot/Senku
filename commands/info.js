@@ -26,7 +26,7 @@ export async function info(message, client) {
 │ User : ${client.user.name}  
 │ Day : ${currentDay}
 │ Date : ${currentDate}/${currentMonth}/${currentYear} 
-│ Version : Developer
+│ Version : 2
 │ Plugins : 27
 ╰─────────────────╯
 
