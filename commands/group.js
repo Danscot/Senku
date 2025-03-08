@@ -98,7 +98,7 @@ export async function kickAll(message, client) {
     }
 }
 
-export async function leaveGroup(message, client) {
+export async function bye(message, client) {
 
     const remoteJid = message.key.remoteJid;
 
@@ -298,4 +298,4 @@ async function isAdmin(client, groupJid, userJid) {
 }
 
 
-export default { kick, kickAll, promote, demote, leaveGroup, pall, dall, mute, unmute, gclink, antilink, linkDetection };
+export default { kick, kickAll, promote, demote, bye, pall, dall, mute, unmute, gclink, antilink, linkDetection };
