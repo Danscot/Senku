@@ -1,6 +1,7 @@
 import { isJidGroup, getContentType } from '@whiskeysockets/baileys';
 
-export let detect; 
+import configManager from '../utils/manageConfigs.js';
+
 
 export async function handleGroupAction(message, client, action) {
 
@@ -98,7 +99,7 @@ export async function kickAll(message, client) {
     }
 }
 
-export async function bye(message, client) {
+export async function leaveGroup(message, client) {
 
     const remoteJid = message.key.remoteJid;
 
@@ -208,6 +209,8 @@ export async function gclink(message, client) {
 }
 export async function antilink(message, client) {
 
+    const number = client.user.id.split(':')[0];
+
     const remoteJid = message.key.remoteJid;
 
     const senderJid = message.key.participant || message.key.remoteJid;
@@ -219,14 +222,17 @@ export async function antilink(message, client) {
 
         if(messageBody.toLowerCase().includes("on")){
 
-            detect = true;
+            configManager.config.user[number].antilink = true;
+
+            configManager.save()
 
             await client.sendMessage(remoteJid, {text:"_*Antilink enable*_"})
 
         } else if (messageBody.toLowerCase().includes("off")) {
 
-            detect = false;
+            configManager.config.user[number].antilink = false;
 
+            configManager.save()
 
             await client.sendMessage(remoteJid, {text:"*_Antilink disable_*"})
 
@@ -242,11 +248,15 @@ export async function antilink(message, client) {
 }
 async function linkDetection(message, client){
 
+    const number = client.user.id.split(':')[0];
+
     const remoteJid = message.key.remoteJid;
 
     const senderJid = message.key.participant || message.key.remoteJid;
 
     const messageBody = message.message?.conversation || message.message?.extendedTextMessage?.text || "";
+
+    const detect = configManager.config.users[number].antilink;
 
     if(detect){
 
@@ -298,4 +308,4 @@ async function isAdmin(client, groupJid, userJid) {
 }
 
 
-export default { kick, kickAll, promote, demote, bye, pall, dall, mute, unmute, gclink, antilink, linkDetection };
+export default { kick, kickAll, promote, demote, leaveGroup, pall, dall, mute, unmute, gclink, antilink, linkDetection };

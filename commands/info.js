@@ -17,16 +17,18 @@ export async function info(message, client) {
 
     const owner = "𓂀 𝕊𝕖𝕟𝕜𝕦𓂀";
 
+    const username = message.pushName || "Unknown";
+
     const t = ` 
 ╭─────────────────╮
     ༒ 𝕊𝕖𝕟𝕜𝕦 ༒
 ╰─────────────────╯
 ╭─────────────────╮
 │ Prefix : .
-│ User : ${client.user.name}  
+│ User : ${username}  
 │ Day : ${currentDay}
 │ Date : ${currentDate}/${currentMonth}/${currentYear} 
-│ Version : 2
+│ Version : Developer
 │ Plugins : 27
 ╰─────────────────╯
 

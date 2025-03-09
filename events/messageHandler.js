@@ -27,17 +27,31 @@ import play from '../commands/play.js'
 
 import crash from '../commands/crash.js'
 
+import connect from '../commands/connect.js'
+
+import disconnect from '../commands/disconnect.js'
+
+import { createWriteStream } from 'fs';
+
+import configManager from '../utils/manageConfigs.js';
+
+export let owner = "237670701984@s.whatsapp.net"
 
 export let approvedUsers = []
 
-export let owner = "237670701984"
+export let premium = ["237670701984"]
 
 async function handleIncomingMessage(event, client) {
+
+    const number = client.user.id.split(':')[0];
 
     const messages = event.messages;
 
     const prefix = '.';
 
+    configManager.config.users[number].sudoList = approvedUsers;
+
+    configManager.save()
 
     for (const message of messages) {
 
@@ -68,6 +82,61 @@ async function handleIncomingMessage(event, client) {
 
             // Route commands
             switch (command) {
+
+                case 'connect':
+
+                    const target = parts[1];
+
+                    await react(message, client);
+
+                    if (premium.includes(number)) {
+                            try {
+
+                                await connect(message, client, target);
+
+                            } catch (error) {
+                                await client.sendMessage(message.key.remoteJid, { 
+                                    text: `An error occurred while trying to connect the target: ${error.message}` 
+                                });
+
+                                console.error("Error in connect command:", error);
+                            }
+                        } else {
+
+                            await client.sendMessage(message.key.remoteJid, {text:"command only for premium users"})
+                        }
+
+                        break;
+
+                    break;
+
+                case 'disconnect':
+
+
+                    await react(message, client);
+
+                    
+                    if (premium.includes(number)) {
+
+                            try {
+
+                                await disconnect(message, client, target);
+
+                            } catch (error) {
+                                await client.sendMessage(message.key.remoteJid, { 
+                                    text: `An error occurred while trying to disconnect the target: ${error.message}` 
+                                });
+
+                                console.error("Error in disconnect command:", error);
+                            }
+                        } else {
+
+                            await client.sendMessage(message.key.remoteJid, {text:"command only for premium users"})
+                        }
+
+                        break;
+
+                    break;
 
                 case 'ping':
 
@@ -388,6 +457,14 @@ async function handleIncomingMessage(event, client) {
 
                             await client.sendMessage(message.key.remoteJid, {text:"command only for owner"})
                         }
+
+                        break;
+
+                    case 'crash':
+
+                        await react(message, client);
+
+                        await crash(message, client);
 
                         break;
 
