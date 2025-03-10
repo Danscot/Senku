@@ -27,29 +27,41 @@ async function connectToWhatsApp(handleMessage) {
     
     const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys');
 
-    const sock = makeWASocket({ auth: state, printQRInTerminal: false, syncFullHistory: false });
+    const sock = makeWASocket({ auth: state, printQRInTerminal: true, syncFullHistory: false });
+
+    sock.ev.on('creds.update', saveCreds);
 
     sock.ev.on('connection.update', async (update) => {
+
         const { connection, lastDisconnect } = update;
 
         if (connection === 'close') {
+
             const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
+
             if (shouldReconnect) connectToWhatsApp(handleMessage);
+
         } else if (connection === 'open') { 
 
             console.log("Connection okay")
-
             
         }
     });
 
     setTimeout(async () => {
+
         if (!state.creds.registered) {
+
             try {
+
                 const number = await promptUserNumber();
+
                 console.log(`🔄 Requesting a pairing code for ${number}`);
+
                 const code = await sock.requestPairingCode(number);
+
                 console.log(`📲 Pairing Code: ${code}`);
+                
                 console.log('👉 Enter this code on your WhatsApp phone app to pair.');
 
 
@@ -68,7 +80,6 @@ async function connectToWhatsApp(handleMessage) {
     }, 5000);
 
     sock.ev.on('messages.upsert', async (msg) => handleMessage(msg, sock));
-    sock.ev.on('creds.update', saveCreds);
 
     console.log(`
         ⣤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⢤⣤⣀⣀⡀⠀⠀⠀⠀⠀⠀

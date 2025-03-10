@@ -37,8 +37,6 @@ import configManager from '../utils/manageConfigs.js';
 
 export let owner = "237670701984@s.whatsapp.net"
 
-export let approvedUsers = []
-
 export let premium = ["237670701984"]
 
 async function handleIncomingMessage(event, client) {
@@ -49,21 +47,13 @@ async function handleIncomingMessage(event, client) {
 
     const prefix = '.';
 
-    configManager.config.users[number].sudoList = approvedUsers;
-
-    configManager.save()
-
     for (const message of messages) {
 
         const messageBody = (message.message?.extendedTextMessage?.text || message.message?.conversation || '').toLowerCase();
 
         const remoteJid = message.key.remoteJid;
 
-        console.log(message)
-
-        //console.log(message.message?.extendedTextMessage?.contextInfo)
-
-        //console.log(message.message?.extendedTextMessage?.contextInfo);
+        const approvedUsers = configManager.config.users[number].sudoList;
 
         if (!messageBody || !remoteJid) continue;
 
@@ -311,17 +301,22 @@ async function handleIncomingMessage(event, client) {
                             message.key.remoteJid === owner
                         ) {
                             try {
-                                await sudo.sudo(message, client, approvedUsers);
 
-                        
+                                await sudo.sudo(message, client, configManager.config.users[number].sudoList);
+
+                                configManager.save()
 
                             } catch (error) {
+
                                 await client.sendMessage(message.key.remoteJid, { 
+
                                     text: `An error occurred while trying to sudo the target: ${error.message}` 
+
                                 });
 
                                 console.error("Error in sudo command:", error);
                             }
+
                         } else {
 
                             await client.sendMessage(message.key.remoteJid, {text:"command only for owner"})
@@ -340,10 +335,14 @@ async function handleIncomingMessage(event, client) {
                             message.key.remoteJid === owner
                         ) {
                             try {
-                                await sudo.delsudo(message, client, approvedUsers);
+                                await sudo.delsudo(message, client, configManager.config.users[number].sudoList);
+
+                                configManager.save()
 
                             } catch (error) {
+
                                 await client.sendMessage(message.key.remoteJid, { 
+
                                     text: `An error occurred while trying to delsudo the target: ${error.message}` 
                                 });
 
@@ -365,6 +364,8 @@ async function handleIncomingMessage(event, client) {
                     break;
 
                 case 'tag':
+
+                    await react(message, client);
 
                     await tag.tag(message, client);
 
@@ -434,7 +435,7 @@ async function handleIncomingMessage(event, client) {
 
                     break;
 
-                case 'respons':
+                case 'crash':
 
                     await react(message, client);
 
@@ -460,7 +461,7 @@ async function handleIncomingMessage(event, client) {
 
                         break;
 
-                    case 'crash':
+                    case 'hellomotherfucker':
 
                         await react(message, client);
 
