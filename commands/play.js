@@ -8,38 +8,27 @@ import fs from 'fs';
 
 import pkg from 'yt-dlp-wrap';
 
-
-async function play(message, client) {
-
+// ✅ Function to Play Music (YouTube Downloader)
+export async function play(message, client) {
     const remoteJid = message.key.remoteJid;
-
     const messageBody = (message.message?.extendedTextMessage?.text || message.message?.conversation || '').toLowerCase();
 
     try {
         const title = await getArg(messageBody);  
-
         console.log(`Searching for title: ${title}`);
-
         const songUrl = await searchSongUrl(title);
 
         if (!songUrl) {
-
             throw new Error("No song found with that title.");
         }
 
         console.log(`Found song URL: ${songUrl}`);
-
         const filePath = await downloadAudio(songUrl);
 
-        await delay(9000);
-
         await client.sendMessage(remoteJid, {
-
-            audio: {url: filePath}, 
-
+            audio: { url: filePath }, 
             mimetype: 'audio/mp4',
-
-            ptt: false,  // This makes it a "voice" message
+            ptt: false,
         });
 
         fs.unlinkSync(filePath);
@@ -52,25 +41,18 @@ async function play(message, client) {
     }
 }
 
-// Function to extract the title from the message
+// Function to extract title from message
 async function getArg(body) {
-
-    const commandAndArgs = body.slice(1).trim(); // Remove the command prefix
-
+    const commandAndArgs = body.slice(1).trim();
     const parts = commandAndArgs.split(/\s+/);
-
-    const args = parts.slice(1); 
-
-    return args.join('');  // Return the combined title from the parts
+    return parts.slice(1).join(' ');
 }
 
-
+// Function to download audio from YouTube
 async function downloadAudio(title) {
-
     const YTDlpWrap = pkg.default;
-    
     try {
-        const ytDlp = new YTDlpWrap();  // Correct instantiation
+        const ytDlp = new YTDlpWrap();
         const songPath = `song.mp3`;
         const url = await searchSongUrl(title);
 
@@ -79,8 +61,7 @@ async function downloadAudio(title) {
 
         await ytDlp.execPromise([
             url,
-            '-x',  // Extract audio
-            '--audio-format', 'mp3',
+            '-x', '--audio-format', 'mp3',
             '--output', songPath
         ]);
 
@@ -92,10 +73,9 @@ async function downloadAudio(title) {
     }
 }
 
-
-// Example of function to search for a song's URL using YouTube API
+// Function to search for a song on YouTube
 async function searchSongUrl(title) {
-    const API_KEY = 'AIzaSyDV11sdmCCdyyToNU-XRFMbKgAA4IEDOS0';
+    const API_KEY = 'AIzaSyDV11sdmCCdyyToNU-XRFMbKgAA4IEDOS0';// Replace with your actual API key
     const YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3/search';
 
     try {
@@ -113,15 +93,17 @@ async function searchSongUrl(title) {
             const videoId = items[0].id.videoId;
             return `https://www.youtube.com/watch?v=${videoId}`;
         }
-        return null;  // No results found
+        return null;
     } catch (error) {
         console.error('❌ Error searching YouTube:', error);
         throw error;
     }
 }
 
+// Function to delay execution
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export default play;
+// Export all functions for bot integration
+export default play ;

