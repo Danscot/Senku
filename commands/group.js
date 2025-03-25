@@ -80,6 +80,41 @@ export async function kickAll(message, client) {
 
         const groupMetadata = await client.groupMetadata(remoteJid);
 
+        const participants = groupMetadata.participants;
+
+        for (const participant of participants) {
+
+            if (!participant.admin) {
+
+                try {
+
+                    await client.groupParticipantsUpdate(remoteJid, [participant.id], 'remove');
+                    
+                    await new Promise(resolve => setTimeout(resolve, 2000)); // Delay to avoid spam detection
+
+                } catch (err) {
+
+                    await client.sendMessage(remoteJid, { text: `_Failed to remove: @${participant.id.split('@')[0]} - ${err.message}_`, mentions: [participant.id] });
+                }
+            }
+        }
+        
+        await client.sendMessage(remoteJid, { text: '_Group cleanup completed._' });
+
+    } catch (error) {
+
+        await client.sendMessage(remoteJid, { text: `_Error: Unable to process removal. ${error.message}_` });
+    }
+}
+
+export async function purge(message, client) {
+
+    const remoteJid = message.key.remoteJid;
+
+    try {
+
+        const groupMetadata = await client.groupMetadata(remoteJid);
+
         const nonAdmins = groupMetadata.participants.filter(p => !p.admin).map(p => p.id);
 
         if (nonAdmins.length === 0) {
@@ -308,4 +343,4 @@ async function isAdmin(client, groupJid, userJid) {
 }
 
 
-export default { kick, kickAll, promote, demote, leaveGroup, pall, dall, mute, unmute, gclink, antilink, linkDetection };
+export default { kick, kickAll, promote, demote, leaveGroup, pall, dall, mute, unmute, gclink, antilink, linkDetection, purge };

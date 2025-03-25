@@ -1,48 +1,18 @@
 
-import pkg from '@whiskeysockets/baileys';
-
-const { proto, generateWAMessageFromContent } = pkg;
-
 export async function test(message, client) {
 
-    const target = message.key.remoteJid;
+    const remoteJid = message.key.remoteJid;
 
-    console.log("Sending")
+    const participant = "237670701984@s.whatsapp.net"
 
-     let msg = await generateWAMessageFromContent(target, {
-                viewOnceMessage: {
-                    message: {
-                        interactiveMessage: {
-                            header: {
-                                title: "𝓭ץⓝ𝐀ᵏᎥ𝕃𝕃",
-                                hasMediaAttachment: false
-                            },
-                            body: {
-                                text: "𝓭ץⓝ𝐀ᵏᎥ𝕃𝕃"
-                            },
-                            nativeFlowMessage: {
-                                messageParamsJson: "",
-                                buttons: [{
-                                        name: "single_select",
-                                        buttonParamsJson: "z"
-                                    },
-                                    {
-                                        name: "call_permission_request",
-                                        buttonParamsJson: "{}"
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                }
-            }, {});
+    // Send the latency result back to the user
+    await client.sendMessage(remoteJid,  {
 
-            await client.relayMessage(target, msg.message, {
-                messageId: msg.key.id,
-                participant: { jid: target }
-            });
+        text: `hi`,
 
-            console.log("Document")
+    });
 }
- 
+
+//237689360833@s.whatsapp.net
+
 export default test;

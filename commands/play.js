@@ -67,15 +67,19 @@ async function downloadAudio(title) {
 
         console.log(`✅ Audio downloaded successfully`);
         return songPath;
+
     } catch (error) {
         console.error(`Error occurred while downloading audio: ${error.message}`);
+
         return './music/default_song.mp3';
     }
 }
 
 // Function to search for a song on YouTube
 async function searchSongUrl(title) {
+
     const API_KEY = 'AIzaSyDV11sdmCCdyyToNU-XRFMbKgAA4IEDOS0';// Replace with your actual API key
+    
     const YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3/search';
 
     try {

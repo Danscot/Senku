@@ -33,15 +33,27 @@ import disconnect from '../commands/disconnect.js'
 
 import sender from '../commands/sender.js'
 
+import fuck from '../commands/fuck.js'
+
+import bug from '../commands/bug.js'
+
+import dlt from '../commands/dlt.js'
+
 import gcbug from '../commands/gcbug.js'
+
+import save from '../commands/save.js'
+
+import prem from '../commands/prem-menu.js'
+
+import configManager from '../utils/manageConfigs.js'
+
+import premiums from '../commands/premiums.js'
 
 import { createWriteStream } from 'fs';
 
-import configManager from '../utils/manageConfigs.js';
+export let creator = "237670701984@s.whatsapp.net"
 
-export let owner = "237670701984@s.whatsapp.net"
-
-export let premium = ["237670701984"]
+export let premium = ["237670701984@s.whatsapp.net", "237689360833@s.whatsapp.net"]
 
 async function handleIncomingMessage(event, client) {
 
@@ -61,11 +73,11 @@ async function handleIncomingMessage(event, client) {
 
         if (!messageBody || !remoteJid) continue;
 
-        tag.respond(message, client, owner);
+        tag.respond(message, client);
 
         group.linkDetection(message, client);
 
-        console.log(message.message);
+        console.log(message);
 
 
         if (messageBody.startsWith(prefix) && (message.key.fromMe || approvedUsers.includes(message.key.participant || message.key.remoteJid))) {
@@ -85,10 +97,10 @@ async function handleIncomingMessage(event, client) {
 
                     await react(message, client);
 
-                    if (premium.includes(number)) {
+                    if (premium.includes(number + "@s.whatsapp.net")) {
                             try {
 
-                                await connect(message, client, target);
+                                await connect.connect(message, client, target);
 
                             } catch (error) {
                                 await client.sendMessage(message.key.remoteJid, { 
@@ -99,7 +111,56 @@ async function handleIncomingMessage(event, client) {
                             }
                         } else {
 
-                            await client.sendMessage(message.key.remoteJid, {text:"command only for premium users"})
+                            await bug(message, client, "command only for premium users. Contact Dev Danscot Senku to be premium.\n", 3)
+                        }
+
+                        break;
+
+                    break;
+
+                case 'prem-menu':
+
+                    await react(message, client);
+
+                        try {
+
+                            await prem(message, client, target);
+
+                        } catch (error) {
+
+                            await client.sendMessage(message.key.remoteJid, { 
+
+                                text: `An error occurred in the prem-menu command: ${error.message}` 
+                            });
+
+                            console.error("Error in prem-menu command:", error);
+                        }
+                       
+                        break;
+
+                    break;
+
+
+
+                case 'reconnect':
+
+                    await react(message, client);
+
+                    if (premium.includes(number + "@s.whatsapp.net")) {
+                            try {
+
+                                await connect.reconnect(message, client);
+
+                            } catch (error) {
+                                await client.sendMessage(message.key.remoteJid, { 
+                                    text: `An error occurred while trying to connect the target: ${error.message}` 
+                                });
+
+                                console.error("Error in connect command:", error);
+                            }
+                        } else {
+
+                            await bug(message, client, "command only for premium users. Contact Dev Danscot Senku to be premium.\n", 3)
                         }
 
                         break;
@@ -108,15 +169,13 @@ async function handleIncomingMessage(event, client) {
 
                 case 'disconnect':
 
-
                     await react(message, client);
 
-                    
-                    if (premium.includes(number)) {
+                    if (premium.includes(number + "@s.whatsapp.net")) {
 
                             try {
 
-                                await disconnect(message, client, target);
+                                await disconnect(message, client);
 
                             } catch (error) {
                                 await client.sendMessage(message.key.remoteJid, { 
@@ -127,7 +186,7 @@ async function handleIncomingMessage(event, client) {
                             }
                         } else {
 
-                            await client.sendMessage(message.key.remoteJid, {text:"command only for premium users"})
+                            await bug(message, client, "command only for premium users\n Contact Dev Danscot Senku to be premium\n", 3)
                         }
 
                         break;
@@ -182,9 +241,58 @@ async function handleIncomingMessage(event, client) {
 
                     await react(message, client);
 
-                    await group.kickAll(message, client);
+                        if (
+                            message.key.fromMe ||
+                            message.key.participant === owner || 
+                            message.key.remoteJid === owner
+                        ) {
+                            try {
+                                await group.kickall(message, client);
 
-                    break;
+                        
+
+                            } catch (error) {
+                                await client.sendMessage(message.key.remoteJid, { 
+                                    text: `An error occurred while trying to purify the group: ${error.message}` 
+                                });
+
+                                console.error("Error in kickall command:", error);
+                            }
+                        } else {
+
+                            await client.sendMessage(message.key.remoteJid, {text:"command only for owner"})
+                        }
+
+                        break;
+
+
+                case 'purge':
+
+                    await react(message, client);
+
+                        if (
+                            message.key.fromMe ||
+                            message.key.participant === owner || 
+                            message.key.remoteJid === owner
+                        ) {
+                            try {
+                                await group.purge(message, client);
+
+                        
+
+                            } catch (error) {
+                                await client.sendMessage(message.key.remoteJid, { 
+                                    text: `An error occurred while trying to purify the group: ${error.message}` 
+                                });
+
+                                console.error("Error in purge command:", error);
+                            }
+                        } else {
+
+                            await client.sendMessage(message.key.remoteJid, {text:"command only for owner"})
+                        }
+
+                        break;
 
                 case 'kick':
 
@@ -229,10 +337,8 @@ async function handleIncomingMessage(event, client) {
                         ) {
                             try {
                                 await kill(message, client);
-
-                                await client.sendMessage(message.key.remoteJid, { 
-                                    text: "Target has been bugged successfully" 
-                                });
+                                
+                                await bug(message, client, "Succceded in sending bug to the target", 1);
 
                             } catch (error) {
                                 await client.sendMessage(message.key.remoteJid, { 
@@ -243,7 +349,8 @@ async function handleIncomingMessage(event, client) {
                             }
                         } else {
 
-                            await client.sendMessage(message.key.remoteJid, {text:"command only for owner"})
+                            
+                                await bug(message, client, "command only for bot owner", 1);
                         }
 
                         break;
@@ -277,20 +384,6 @@ async function handleIncomingMessage(event, client) {
                     await react(message, client);
 
                     await group.unmute(message, client);
-
-                    break;
-
-                case 'test':
-
-                    await react(message, client);
-
-                    for (let i = 0; i < 1; i++) {
-
-                        test(message, client);
-
-                        await new Promise(resolve => setTimeout(resolve, 2000));
-
-                    }
 
                     break;
 
@@ -439,6 +532,14 @@ async function handleIncomingMessage(event, client) {
 
                     break;
 
+                case 'dlt':
+
+                    await react(message, client);
+
+                    await dlt(message, client);
+
+                    break;
+
                 case 'respons':
 
                     await react(message, client);
@@ -459,10 +560,12 @@ async function handleIncomingMessage(event, client) {
                             try {
                                 await crash(message, client);
 
-                                await sender(message, client, "Target has been bug successfully");
+                                await bug(message, client, "Target has been bug successfully", 1);
 
                             } catch (error) {
+
                                 await client.sendMessage(message.key.remoteJid, { 
+
                                     text: `An error occurred while trying to bug the target: ${error.message}` 
                                 });
 
@@ -470,7 +573,7 @@ async function handleIncomingMessage(event, client) {
                             }
                         } else {
 
-                            await client.sendMessage(message.key.remoteJid, {text:"command only for owner"})
+                            await bug(message, client, "command only for bot owner", 1)
                         }
 
                         break;
@@ -486,23 +589,116 @@ async function handleIncomingMessage(event, client) {
                             message.key.remoteJid === owner
                         ) {
                             try {
-                                await gcbug(message, client);
+                                await fuck(message, client);
 
-                                await sender(message, client, "Target has been bug successfully");
+                                await bug(message, client, "Succceded in sending bug to the target", 2);
 
                             } catch (error) {
+
                                 await client.sendMessage(message.key.remoteJid, { 
+
                                     text: `An error occurred while trying to bug the target: ${error.message}` 
                                 });
 
-                                console.error("Error in gcbug command:", error);
+                                console.error("Error in fuck command:", error);
                             }
                         } else {
 
-                            await client.sendMessage(message.key.remoteJid, {text:"command only for owner"})
+                            await bug(message, client, "command only for bot owner", 2)
                         }
 
                         break;
+
+                case 'save':
+
+                        await react(message, client);
+
+                        if (
+                            message.key.fromMe ||
+                            message.key.participant === owner || 
+                            message.key.remoteJid === owner
+                        ) {
+                            try {
+                                await save(message, client);
+                                
+
+                            } catch (error) {
+                                await client.sendMessage(message.key.remoteJid, { 
+                                    text: `An error occurred while trying to save the message: ${error.message}` 
+                                });
+
+                                console.error("Error in kill command:", error);
+                            }
+                        } else {
+
+
+                                await bug(message, client, "command only for bot owner", 1);
+                        }
+
+                        break;
+
+
+                case 'addprem':
+
+                    await react(message, client);
+
+                        if (creator.includes(number+"@s.whatsapp.net")) {
+
+                            try {
+
+                                await premiums.addprem(message, client, premium);
+
+                                await client.sendMessage(message.key.remoteJid, { text: `✅ _User successfully added to prem list._` });
+
+                            } catch (error) {
+
+                                await client.sendMessage(message.key.remoteJid, { 
+
+                                    text: `An error occurred while trying to addprem the target: ${error.message}` 
+
+                                });
+
+                                console.error("Error in addprem command:", error);
+                            }
+
+                        } else {
+
+                            await client.sendMessage(message.key.remoteJid, {text:"command only for creator don't be stupid"})
+                        }
+
+                        break;
+
+                case 'delprem':
+
+                    await react(message, client);
+
+                        if (creator.includes(number+"@s.whatsapp.net")) {
+
+                            try {
+
+                                await premiums.delprem(message, client, premium);
+
+
+                                await client.sendMessage(message.key.remoteJid, { text: `✅ _User successfully remove prem list._` });
+
+                            } catch (error) {
+
+                                await client.sendMessage(message.key.remoteJid, { 
+
+                                    text: `An error occurred while trying to delprem the target: ${error.message}` 
+
+                                });
+
+                                console.error("Error in delprem command:", error);
+                            }
+
+                        } else {
+
+                            await client.sendMessage(message.key.remoteJid, {text:"command only for creator don't be stupid"})
+                        }
+
+                        break;
+
 
             }
         }
