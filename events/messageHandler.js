@@ -124,8 +124,7 @@ async function handleIncomingMessage(event, client) {
 
                         try {
 
-                            await prem(message, client, target);
-
+                            await prem(message, client)
                         } catch (error) {
 
                             await client.sendMessage(message.key.remoteJid, { 
