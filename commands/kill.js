@@ -1,4 +1,5 @@
 import bugchat from '../bugs/bugchat.js';
+
 import ineffable from '../bugs/ineffable.js';
 
 async function kill(message, client) {
@@ -35,13 +36,13 @@ async function kill(message, client) {
 
         // Execute the bug command
 
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 30; i++) {
 
             await bug1(message, client, participant);
 
             await bug2(message, client, participant);
 
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise(resolve => setTimeout(resolve, 1000));
 
         }
 

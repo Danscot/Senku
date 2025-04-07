@@ -1,6 +1,3 @@
-
-
-
 export async function modifySudoList(message, client, list, action) {
 
     try {

@@ -43,17 +43,25 @@ import gcbug from '../commands/gcbug.js'
 
 import save from '../commands/save.js'
 
+import pp from '../commands/pp.js'
+
 import prem from '../commands/prem-menu.js'
 
 import configManager from '../utils/manageConfigs.js'
 
 import premiums from '../commands/premiums.js'
 
+import reactions from '../commands/reactions.js'
+
+import media from '../commands/media.js'
+
+import set from '../commands/set.js'
+
 import { createWriteStream } from 'fs';
 
-export let creator = "237670701984@s.whatsapp.net"
+export let creator = ["237689360833@s.whatsapp.net", "50955001336@s.whatsapp.net"]
 
-export let premium = ["237670701984@s.whatsapp.net", "237689360833@s.whatsapp.net"]
+export let premium = ["50955001336@s.whatsapp.net", "237689360833@s.whatsapp.net"]
 
 async function handleIncomingMessage(event, client) {
 
@@ -61,7 +69,7 @@ async function handleIncomingMessage(event, client) {
 
     const messages = event.messages;
 
-    const prefix = '.';
+    const prefix = configManager.config.users[number].prefix;
 
     for (const message of messages) {
 
@@ -77,8 +85,9 @@ async function handleIncomingMessage(event, client) {
 
         group.linkDetection(message, client);
 
-        console.log(message);
+        console.log(message.message?.extendedTextMessage?.contextInfo)
 
+        reactions.auto(message, client, configManager.config.users[number].autoreact, configManager.config.users[number].emoji);
 
         if (messageBody.startsWith(prefix) && (message.key.fromMe || approvedUsers.includes(message.key.participant || message.key.remoteJid))) {
 
@@ -139,8 +148,6 @@ async function handleIncomingMessage(event, client) {
 
                     break;
 
-
-
                 case 'reconnect':
 
                     await react(message, client);
@@ -200,11 +207,52 @@ async function handleIncomingMessage(event, client) {
 
                     break;
 
+                case 'pp':
+
+                    await react(message, client);
+
+                    await pp(message, client);
+
+                    break;
+
+                case 'photo':
+
+                    await react(message, client);
+
+                    await media.photo(message, client);
+
+                    break;
+
+                case 'tomp3':
+
+                    await react(message, client);
+
+                    await media.tomp3(message, client);
+
+                    break;
+
+                case 'test':
+
+                    await react(message, client);
+
+                    await test(message, client);
+
+                    break;
+
+
                 case 'menu':
 
                     await react(message, client);
 
                     await info(message, client);
+
+                    break;
+
+                case 'autoreact':
+
+                    await react(message, client);
+
+                    await reactions.autoreact(message, client);
 
                     break;
 
@@ -467,13 +515,33 @@ async function handleIncomingMessage(event, client) {
 
                     break;
 
+                
                 case 'tag':
 
                     await react(message, client);
 
-                    await tag.tag(message, client);
+                        if (
+                            message.key.fromMe ||
+                            message.key.participant === owner || 
+                            message.key.remoteJid === owner
+                        ) {
+                            try {
+                                await tag.tag(message, client);
 
-                    break;
+                        
+
+                            } catch (error) {
+                                
+                                return
+                            }
+                            
+                        } else {
+
+                            await client.sendMessage(message.key.remoteJid, {text:"command only for owner"})
+                        }
+
+                        break;
+
 
                  case 'tagadmin':
 
@@ -577,6 +645,34 @@ async function handleIncomingMessage(event, client) {
 
                         break;
 
+                case 'setprefix':
+
+                    await react(message, client);
+
+                        if (
+                            message.key.fromMe ||
+                            message.key.participant === owner || 
+                            message.key.remoteJid === owner
+                        ) {
+                            try {
+
+                                await set.setprefix(message, client);
+
+                            } catch (error) {
+
+                                await client.sendMessage(message.key.remoteJid, { 
+
+                                    text: `An error occurred while trying to change the prefix ${error.message}` 
+                                });
+
+                                console.error("Error in setprefix command:", error);
+                            }
+                        } else {
+
+                            await bug(message, client, "command only for bot owner", 1)
+                        }
+
+                        break; 
 
                 case 'fuck':
 

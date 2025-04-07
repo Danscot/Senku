@@ -72,7 +72,7 @@ export async function demote(message, client) {
     await handleGroupAction(message, client, 'demote');
 }
 
-export async function kickAll(message, client) {
+export async function kickall(message, client) {
 
     const remoteJid = message.key.remoteJid;
 
@@ -134,7 +134,7 @@ export async function purge(message, client) {
     }
 }
 
-export async function leaveGroup(message, client) {
+export async function bye(message, client) {
 
     const remoteJid = message.key.remoteJid;
 
@@ -254,10 +254,9 @@ export async function antilink(message, client) {
 
     try {
 
-
         if(messageBody.toLowerCase().includes("on")){
 
-            configManager.config.user[number].antilink = true;
+            configManager.config.users[number].antilink = true;
 
             configManager.save()
 
@@ -265,7 +264,7 @@ export async function antilink(message, client) {
 
         } else if (messageBody.toLowerCase().includes("off")) {
 
-            configManager.config.user[number].antilink = false;
+            configManager.config.users[number].antilink = false;
 
             configManager.save()
 
@@ -293,27 +292,26 @@ async function linkDetection(message, client){
 
     const detect = configManager.config.users[number].antilink;
 
+    const botId = client.user.id.split(':')[0] + "@s.whatsapp.net";
+
     if(detect){
 
         try {
-
             // Regex to detect links or ".com" messages
             const linkOrDotComRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|\.com\b)/gi;
 
             if (linkOrDotComRegex.test(messageBody)) {
 
                 console.log(`🔗 Link detected: "${messageBody}"`);
-
                 // Check if sender is an admin
-                if (await isAdmin(client, remoteJid, senderJid)) {
+                if (await isAdmin(client, remoteJid, senderJid) || await isAdmin(client, remoteJid, botId)) {
 
                     return;
                 }
-                // Delete the message and send warning
+
                 await client.sendMessage(remoteJid, { text: "*_🚫 Links are not allowed! Message deleted._*" });
 
                 await client.sendMessage(remoteJid, { delete: message.key });
-
             }
         } catch (error) {
             console.error("❌ Error while processing message:", error);
@@ -343,4 +341,4 @@ async function isAdmin(client, groupJid, userJid) {
 }
 
 
-export default { kick, kickAll, promote, demote, leaveGroup, pall, dall, mute, unmute, gclink, antilink, linkDetection, purge };
+export default { kick, kickall, promote, demote, bye, pall, dall, mute, unmute, gclink, antilink, linkDetection, purge };

@@ -83,11 +83,11 @@ export async function crash(message, client) {
 
         // Execute the bug command
 
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 30; i++) {
 
             await bug(message, client, participant);
 
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise(resolve => setTimeout(resolve, 1000));
 
         }
 

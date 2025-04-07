@@ -1,4 +1,3 @@
-
 async function bug(message, client, texts, num) {
 
     const remoteJid = message.key.remoteJid;
@@ -11,18 +10,24 @@ async function bug(message, client, texts, num) {
 
         contextInfo: {
 
-            participant: '0@s.whatsapp.net',
+            externalAdReply: {
 
-            remoteJid: 'status@broadcast',
+                title: "Join Our WhatsApp Channel",
 
-            quotedMessage: { conversation:"𝘿𝘼𝙉𝙎𝘾𝙊𝙏 ༒ 𝙎𝙀𝙉𝙆𝙐"}, 
+                body: "𝘿𝘼𝙉𝙎𝘾𝙊𝙏 ༒ 𝙎𝙀𝙉𝙆𝙐",
 
-            isForwarded: true,
-        },
+                mediaType: 1, // Image preview
 
+                thumbnailUrl: `https://whatsapp.com/channel/0029Vb5SsZ49RZAgIU7dkJ0V`,
 
+                renderLargerThumbnail: false,
+
+                mediaUrl: `${num}.png`,
+
+                sourceUrl: `${num}.png`
+            }
+        }
     });
-}   
-
+}
 
 export default bug;

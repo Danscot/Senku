@@ -13,7 +13,7 @@
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@hapi/boom": "^10.0.1",
-    "@whiskeysockets/baileys": "^6.7.9",
+    "@whiskeysockets/baileys": "^6.7.16",
     "axios": "^1.8.1",
     "baileys": "^6.7.13",
     "exiftool": "^0.0.3",

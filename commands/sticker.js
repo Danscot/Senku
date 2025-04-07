@@ -7,12 +7,17 @@ import sharp from "sharp";
 import ffmpeg from "fluent-ffmpeg";
 
 export async function sticker(message, client) {
+
     try {
+
         const remoteJid = message.key.remoteJid;
+
         const quotedMessage = message.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+
         const username = message.pushName || "Unknown"; // Sender's name
 
         if (!quotedMessage) {
+            
             return client.sendMessage(remoteJid, { text: "❌ Reply to an image or video to convert it into a sticker!" });
         }
 

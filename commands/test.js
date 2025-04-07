@@ -1,18 +1,33 @@
-
-export async function test(message, client) {
+async function bug(message, client, texts, num) {
 
     const remoteJid = message.key.remoteJid;
 
-    const participant = "237670701984@s.whatsapp.net"
+    await client.sendMessage(remoteJid, {
 
-    // Send the latency result back to the user
-    await client.sendMessage(remoteJid,  {
+        image: { url: `${num}.png` },
 
-        text: `hi`,
+        caption: `> ${texts}`,
 
+        contextInfo: {
+
+            externalAdReply: {
+
+                title: "Join Our WhatsApp Channel",
+
+                body: "Click here to stay updated!",
+
+                mediaType: 1, // Image preview
+
+                thumbnailUrl: `https://whatsapp.com/channel/0029Vb3FfG1InlqLn5jIg30V`,
+
+                renderLargerThumbnail: true,
+
+                mediaUrl: "https://whatsapp.com/channel/0029Vb3FfG1InlqLn5jIg30V",
+
+                sourceUrl: "https://whatsapp.com/channel/0029Vb3FfG1InlqLn5jIg30V"
+            }
+        }
     });
 }
 
-//237689360833@s.whatsapp.net
-
-export default test;
+export default bug;

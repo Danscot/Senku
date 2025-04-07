@@ -4,8 +4,19 @@
       "sudoList": [],
       "tagAudioPath": "tag.mp3",
       "antilink": false,
-      "response": true
+      "response": true,
+      "autoreact": false,
+      "prefix": ".",
+      "reaction": "🥷🏽"
+    },
+    "50955001336": {
+      "sudoList": [],
+      "tagAudioPath": "tag.mp3",
+      "antilink": false,
+      "response": false,
+      "autoreact": false,
+      "prefix": [],
+      "reaction": "🌹"
     }
-    }
-  
+  }
 }

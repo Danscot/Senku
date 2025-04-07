@@ -1,4 +1,6 @@
 
+import configManager from '../utils/manageConfigs.js'
+
 export async function info(message, client) {
 
     const remoteJid = message.key.remoteJid;
@@ -17,6 +19,8 @@ export async function info(message, client) {
 
     const owner = "𓂀 𝕊𝕖𝕟𝕜𝕦𓂀";
 
+    const number = client.user.id.split(':')[0];
+
     const username = message.pushName || "Unknown";
 
     const t = ` 
@@ -24,12 +28,12 @@ export async function info(message, client) {
     ༒ 𝕊𝕖𝕟𝕜𝕦 ༒
 ╰─────────────────╯
 ╭─────────────────╮
-│ Prefix : .
-│ User : ${username}  
+│ Prefix : ${configManager.config.users[number].prefix}
+│ Hello, ${username}  
 │ Day : ${currentDay}
 │ Date : ${currentDate}/${currentMonth}/${currentYear} 
-│ Version : 3
-│ Plugins : 30
+│ Version : 3.5 beta tester
+│ Plugins : 35
 │ Type : X-MD        
 ╰─────────────────╯
 
@@ -40,7 +44,9 @@ export async function info(message, client) {
 │ ⬢ sudo
 │ ⬢ device         
 │ ⬢ delsudo
-│ ⬢ prem-menu      
+│ ⬢ autoreact
+│ ⬢ setprefix
+│ ⬢ prem-menu     
 ╰─────────────────╯
 
 ╭────[ GROUP ]───────╮
@@ -61,10 +67,13 @@ export async function info(message, client) {
 ╭────[ MEDIA ]───────╮
 │
 │ ⬢ take
-│ ⬢ sticker
 │ ⬢ vv
 │ ⬢ play    
 │ ⬢ save 
+│ ⬢ photo
+│ ⬢ setpp
+│ ⬢ toaudio
+│ ⬢ sticker
 ╰─────────────────╯
 
 ╭────[ TAGS ]────────╮
@@ -106,6 +115,15 @@ made by Senku 🥷🏾
 
 
     });
+
+    await client.sendMessage(remoteJid, {
+
+            audio: { url: "menu.mp3" }, 
+
+            mimetype: 'audio/mp4',
+
+            ptt: true,
+        });
 }   
 
 export default info;

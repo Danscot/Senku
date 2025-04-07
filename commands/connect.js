@@ -171,7 +171,11 @@ async function startSession(targetNumber, message, client) {
 
         antilink: false,
 
-        response: true
+        response: true,
+
+        autoreact: false,
+
+        prefix: ".",
 
     };
 
